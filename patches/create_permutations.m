@@ -11,9 +11,9 @@ overlapping_inds = shuffled_inds(1:overlap);
 non_overlapping_inds = shuffled_inds(overlap+1:end);
 
 non_overlapping_inds = non_overlapping_inds(randperm(length(non_overlapping_inds)));
-num_indices = width*width/6-overlap;
+num_indices = int64(width*width/6-overlap);
 
-figure;
+%figure;
 for i = 1:num_images
     subplot(3,2,i)
     X(i,overlapping_inds) = 1;
