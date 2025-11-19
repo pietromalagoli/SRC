@@ -1,0 +1,27 @@
+function [ f ] = compute_neural_reactivation( ann, snn, X, y, numNeurons )
+%UNTITLED3 Summary of this function goes here
+%   Detailed explanation goes here
+%% numNeurons è 100 nel paper, perché prendono i top 100 neuroni per 
+%% spiking relativi ad un dato class input
+
+nn_temp = nnff(ann, X, y); % for activations in ANN
+[~, labels] = max(y, [], 2);
+
+top_neurons = zeros(length(nn_temp.a)-1,10,100); % top100 neurons of each layer for each class
+                                                 % top_neurons.shape(#layers,#classes,100)
+top_stds = zeros(length(nn_temp.a)-1,10,100);
+
+for i = 1:length(nn_temp.a)-1 % number of layers
+    for j = 1:10 % number of classes in dataset
+        activations = nn_temp.a{i}(labels == j,:);
+        topxactivations = zeros(length(activations), 100); % top neurons for each activation
+        for k = 1:length(activations) % nel caso di MNIST ogni activation è di 100 elementi perché le immagini sono 10x10
+            [~, high_firing_inds] = sort(activations(k,:), 'descend'); % qua sto sortando tutti neuroni del layer in base alle attivazioni sul pixel k dell'input
+            topxactivations(k) = high_firing_inds(1:numNeurons);
+        end
+        top_neurons(i,j,:) = mean(topxactivations,1);
+        top_stds(i,j,:) = std(topxactivations,1);
+    end
+end
+end
+
