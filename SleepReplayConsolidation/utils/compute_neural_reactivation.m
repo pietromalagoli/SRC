@@ -1,8 +1,8 @@
 function [ f ] = compute_neural_reactivation( ann, snn, X, y, numNeurons,n)
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
-%% numNeurons è 100 nel paper, perché prendono i top 100 neuroni per 
-%% spiking relativi ad un dato class input
+% numNeurons è 100 nel paper, perché prendono i top 100 neuroni per 
+% spiking relativi ad un dato class input
 
 nn_temp = nnff(ann, X, y); % for activations in ANN
 [~, labels] = max(y, [], 2);
